@@ -21,22 +21,22 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
 
   const portfolioItems = [
     {
-      name: "Abilene Commercial",
-      url: "https://abilenecommercial.com/",
-      imageUrl: "https://picsum.photos/id/3/800/450",
-      description: "Commercial services website"
+      name: "Adams Plumbing Texas",
+      url: "https://adamsplumbingtexas.com/",
+      imageUrl: "/lovable-uploads/508af3b1-6c6a-4b4d-b09f-546c17f9d359.png",
+      description: "Plumbing services in Texas"
     },
     {
       name: "Master Clean HQ",
       url: "https://mastercleanhq.com",
-      imageUrl: "https://picsum.photos/id/20/800/450",
+      imageUrl: "/lovable-uploads/2eb67e5d-1d4e-4f9d-9528-1adc05fb94a1.png",
       description: "Professional cleaning services"
     },
     {
-      name: "Adams Plumbing Texas",
-      url: "https://adamsplumbingtexas.com/",
-      imageUrl: "https://picsum.photos/id/60/800/450",
-      description: "Plumbing services in Texas"
+      name: "Abilene Commercial",
+      url: "https://abilenecommercial.com/",
+      imageUrl: "/lovable-uploads/3d5aebeb-d5c2-442e-b806-dbc4786385a8.png",
+      description: "Commercial real estate"
     }
   ];
 
