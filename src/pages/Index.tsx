@@ -7,6 +7,7 @@ import QualificationQuiz from '@/components/QualificationQuiz';
 import FooterSection from '@/components/FooterSection';
 
 const Index = () => {
+  const [isRegistered, setIsRegistered] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   
   useEffect(() => {
@@ -29,6 +30,18 @@ const Index = () => {
   }, []);
 
   const handleRegistrationComplete = () => {
+    setIsRegistered(true);
+    
+    // Scroll to videos section after registration
+    setTimeout(() => {
+      const videosSection = document.getElementById('videos');
+      if (videosSection) {
+        videosSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 300);
+  };
+
+  const handleQualificationStart = () => {
     setShowQuiz(true);
     
     // Scroll to quiz section after a short delay
@@ -43,8 +56,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <HeroSection />
-      <VideoSection />
       <RegistrationForm onRegistrationComplete={handleRegistrationComplete} />
+      {isRegistered && <VideoSection onStartQualification={handleQualificationStart} />}
       {showQuiz && <QualificationQuiz />}
       <FooterSection />
     </div>

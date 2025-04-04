@@ -1,7 +1,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
 
-const VideoSection = () => {
+interface VideoSectionProps {
+  onStartQualification: () => void;
+}
+
+const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -64,6 +69,15 @@ const VideoSection = () => {
               allowFullScreen
               className="border-0"
             ></iframe>
+          </div>
+          
+          <div className="flex justify-center mt-12">
+            <Button 
+              onClick={onStartQualification}
+              className="btn-primary"
+            >
+              Check If You Qualify
+            </Button>
           </div>
         </div>
       </div>
