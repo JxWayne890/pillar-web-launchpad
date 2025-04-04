@@ -92,22 +92,22 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
             ></iframe>
           </div>
           
-          {/* Portfolio Showcase Section */}
-          <div className="mt-24">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
+          {/* Portfolio Showcase Section - Smaller Size */}
+          <div className="mt-16">
+            <h3 className="text-2xl font-bold text-center mb-6">
               Our Recent Website Projects
-            </h2>
+            </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
               {portfolioItems.map((item, index) => (
                 <a 
                   key={index} 
                   href={item.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="group"
+                  className="group w-full sm:w-1/3 md:w-1/4 max-w-[220px]"
                 >
-                  <div className="portfolio-item bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                  <div className="portfolio-item bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg">
                     <div className="relative aspect-video overflow-hidden">
                       <img 
                         src={item.imageUrl} 
@@ -115,12 +115,12 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-navy-blue/80 opacity-0 group-hover:opacity-90 transition-opacity duration-300 flex items-center justify-center">
-                        <span className="text-white text-lg font-bold">Visit Website</span>
+                        <span className="text-white text-sm font-bold">Visit Site</span>
                       </div>
                     </div>
-                    <div className="p-5">
-                      <h3 className="text-xl font-bold mb-2 text-navy-blue">{item.name}</h3>
-                      <p className="text-steel-gray">{item.description}</p>
+                    <div className="p-3">
+                      <h4 className="text-sm font-bold mb-1 text-navy-blue truncate">{item.name}</h4>
+                      <p className="text-steel-gray text-xs">{item.description}</p>
                     </div>
                   </div>
                 </a>
