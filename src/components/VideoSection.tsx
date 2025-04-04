@@ -45,7 +45,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
     <section id="videos" className="bg-white py-16" ref={sectionRef}>
       <div className="section-container">
         <div className={`animate-fade-in ${isVisible ? 'active' : ''}`}>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
             See Our Process
           </h2>
           
@@ -74,7 +74,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
           <div className="flex justify-center mt-12">
             <Button 
               onClick={onStartQualification}
-              className="btn-primary"
+              className="btn-primary text-lg py-4 px-8"
             >
               Like What You See? Let's Schedule a Call!
             </Button>
