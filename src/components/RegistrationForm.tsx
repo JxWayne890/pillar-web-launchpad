@@ -71,11 +71,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
       <div className="section-container max-w-2xl">
         <div className={`animate-fade-in ${isVisible ? 'active' : ''}`}>
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            Ready to Build Your Pillar?
+            Please Register to View Our Work
           </h2>
-          <p className="text-xl text-gray-600 text-center mb-10">
-            Let's Get Started
-          </p>
 
           <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
             <div className="form-group">
