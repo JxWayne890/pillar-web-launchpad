@@ -76,7 +76,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
               onClick={onStartQualification}
               className="btn-primary"
             >
-              Check If You Qualify
+              Like What You See? Let's Schedule a Call!
             </Button>
           </div>
         </div>
