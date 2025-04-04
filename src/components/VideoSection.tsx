@@ -19,6 +19,27 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
   const video1Url = getEmbedUrl("https://drive.google.com/file/d/1an8eLFp1NyHAbAFVKsT_bUFY0GZcSux2/view?usp=sharing");
   const video2Url = getEmbedUrl("https://drive.google.com/file/d/1RPzxIqQPSmC12wQES7Qh99NcGIVjDqPw/view?usp=sharing");
 
+  const portfolioItems = [
+    {
+      name: "Abilene Commercial",
+      url: "https://abilenecommercial.com/",
+      imageUrl: "https://picsum.photos/id/3/800/450",
+      description: "Commercial services website"
+    },
+    {
+      name: "Master Clean HQ",
+      url: "https://mastercleanhq.com",
+      imageUrl: "https://picsum.photos/id/20/800/450",
+      description: "Professional cleaning services"
+    },
+    {
+      name: "Adams Plumbing Texas",
+      url: "https://adamsplumbingtexas.com/",
+      imageUrl: "https://picsum.photos/id/60/800/450",
+      description: "Plumbing services in Texas"
+    }
+  ];
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -71,7 +92,43 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
             ></iframe>
           </div>
           
-          <div className="flex justify-center mt-12">
+          {/* Portfolio Showcase Section */}
+          <div className="mt-24">
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
+              Our Recent Website Projects
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {portfolioItems.map((item, index) => (
+                <a 
+                  key={index} 
+                  href={item.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group"
+                >
+                  <div className="portfolio-item bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+                    <div className="relative aspect-video overflow-hidden">
+                      <img 
+                        src={item.imageUrl} 
+                        alt={item.name} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-navy-blue/80 opacity-0 group-hover:opacity-90 transition-opacity duration-300 flex items-center justify-center">
+                        <span className="text-white text-lg font-bold">Visit Website</span>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-xl font-bold mb-2 text-navy-blue">{item.name}</h3>
+                      <p className="text-steel-gray">{item.description}</p>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+          
+          <div className="flex justify-center mt-16">
             <Button 
               onClick={onStartQualification}
               className="btn-primary text-lg py-4 px-8"
