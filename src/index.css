@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
@@ -36,6 +36,11 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+    
+    /* Custom colors */
+    --navy-blue: 213 48% 23%;
+    --steel-gray: 220 15% 38%;
+    --pillar-blue: 203 38% 44%;
   }
 
   .dark {
@@ -80,7 +85,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold;
+    @apply font-bold text-navy-blue;
   }
 
   /* Smooth scrolling for the entire page */
@@ -95,7 +100,7 @@
   }
 
   .btn-primary {
-    @apply bg-primary text-white px-6 py-3 rounded-md font-medium transition-all duration-300 hover:bg-primary/90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50;
+    @apply bg-navy-blue text-white px-6 py-3 rounded-md font-bold transition-all duration-300 hover:bg-navy-blue/90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-navy-blue/50;
   }
 
   .video-container {
@@ -107,7 +112,7 @@
   }
 
   .form-input {
-    @apply w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent;
+    @apply w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pillar-blue/50 focus:border-transparent;
   }
 
   .animate-fade-in {
@@ -118,11 +123,43 @@
     @apply opacity-100 translate-y-0;
   }
   
-  /* Background pattern */
+  /* Background patterns */
   .bg-grid-pattern {
     background-image: 
       linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
     background-size: 20px 20px;
+  }
+  
+  .bg-blueprint-pattern {
+    background-image: 
+      linear-gradient(to right, rgba(29, 53, 87, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(29, 53, 87, 0.03) 1px, transparent 1px);
+    background-size: 25px 25px;
+  }
+  
+  /* Custom color classes */
+  .text-navy-blue {
+    color: rgb(29, 53, 87);
+  }
+  
+  .text-steel-gray {
+    color: rgb(79, 93, 117);
+  }
+  
+  .text-pillar-blue {
+    color: rgb(69, 123, 157);
+  }
+  
+  .bg-navy-blue {
+    background-color: rgb(29, 53, 87);
+  }
+  
+  .bg-steel-gray {
+    background-color: rgb(79, 93, 117);
+  }
+  
+  .bg-pillar-blue {
+    background-color: rgb(69, 123, 157);
   }
 }

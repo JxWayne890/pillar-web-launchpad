@@ -6,7 +6,7 @@ const FooterSection = () => {
     <footer className="bg-gradient-to-b from-white to-gray-100 py-12">
       <div className="section-container">
         <div className="text-center">
-          <p className="text-gray-600">
+          <p className="text-steel-gray font-medium">
             © {new Date().getFullYear()} Pillar Web Designs. All rights reserved.
           </p>
         </div>
