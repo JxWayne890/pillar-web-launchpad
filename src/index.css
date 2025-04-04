@@ -155,11 +155,23 @@
     background-color: rgb(29, 53, 87);
   }
   
+  .bg-navy-blue\/90 {
+    background-color: rgba(29, 53, 87, 0.9);
+  }
+  
+  .bg-navy-blue\/50 {
+    background-color: rgba(29, 53, 87, 0.5);
+  }
+  
   .bg-steel-gray {
     background-color: rgb(79, 93, 117);
   }
   
   .bg-pillar-blue {
     background-color: rgb(69, 123, 157);
+  }
+  
+  .bg-pillar-blue\/50 {
+    background-color: rgba(69, 123, 157, 0.5);
   }
 }

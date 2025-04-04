@@ -56,6 +56,9 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				'navy-blue': 'rgb(29, 53, 87)',
+				'steel-gray': 'rgb(79, 93, 117)',
+				'pillar-blue': 'rgb(69, 123, 157)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
