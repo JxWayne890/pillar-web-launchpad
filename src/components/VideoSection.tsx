@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { FileVideo, Code } from 'lucide-react';
 
 interface VideoSectionProps {
   onStartQualification: () => void;
@@ -70,26 +71,64 @@ const VideoSection: React.FC<VideoSectionProps> = ({ onStartQualification }) => 
             See Our Process
           </h2>
           
-          <div className="video-container">
-            <iframe
-              src={video1Url}
-              width="100%"
-              height="450"
-              allow="autoplay"
-              allowFullScreen
-              className="border-0"
-            ></iframe>
+          {/* First Video with Description */}
+          <div className="mb-16">
+            <div className="video-description mb-6 max-w-3xl mx-auto">
+              <div className="flex items-start space-x-4">
+                <div className="bg-navy-blue/10 p-3 rounded-full">
+                  <FileVideo className="h-6 w-6 text-navy-blue" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-navy-blue mb-2">Custom Website Development</h3>
+                  <p className="text-steel-gray text-lg leading-relaxed">
+                    In this video, I'm showcasing a website I created for a real estate agent. It features a custom blog creator and uploader directly in the website, 
+                    along with security measures to protect against unauthorized blog creation. Most importantly, it includes a custom web scraper that allows the 
+                    agent to bypass IDX payments while still streaming MLS listings on his website.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="video-container">
+              <iframe
+                src={video1Url}
+                width="100%"
+                height="450"
+                allow="autoplay"
+                allowFullScreen
+                className="border-0 rounded-xl shadow-xl"
+              ></iframe>
+            </div>
           </div>
           
-          <div className="video-container">
-            <iframe
-              src={video2Url}
-              width="100%"
-              height="450"
-              allow="autoplay"
-              allowFullScreen
-              className="border-0"
-            ></iframe>
+          {/* Second Video with Description */}
+          <div className="mb-16">
+            <div className="video-description mb-6 max-w-3xl mx-auto">
+              <div className="flex items-start space-x-4">
+                <div className="bg-navy-blue/10 p-3 rounded-full">
+                  <Code className="h-6 w-6 text-navy-blue" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-navy-blue mb-2">IDX Webscraper Showcase</h3>
+                  <p className="text-steel-gray text-lg leading-relaxed">
+                    This video provides an in-depth showcase of the IDX Webscraper I built using n8n. This innovative solution helped my client, 
+                    a real estate agent, save significant money by eliminating expensive IDX subscription fees while still displaying property listings 
+                    on his website.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="video-container">
+              <iframe
+                src={video2Url}
+                width="100%"
+                height="450"
+                allow="autoplay"
+                allowFullScreen
+                className="border-0 rounded-xl shadow-xl"
+              ></iframe>
+            </div>
           </div>
           
           {/* Portfolio Showcase Section - Smaller Size */}
