@@ -47,28 +47,73 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
     const webhookUrl = "https://n8n-1-yvtq.onrender.com/webhook-test/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
     
     try {
-      // Use XMLHttpRequest instead of fetch with no-cors
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", webhookUrl, true);
-      xhr.setRequestHeader("Content-Type", "application/json");
+      console.log("Attempting to trigger webhook at:", webhookUrl);
       
-      const payload = JSON.stringify({
+      const payload = {
         fullName: formData.fullName,
         email: formData.email,
         timestamp: new Date().toISOString(),
         source: window.location.origin
-      });
-      
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-          console.log("Webhook request completed with status:", xhr.status);
-        }
       };
       
-      xhr.send(payload);
-      console.log("Webhook triggered with payload:", payload);
+      console.log("Webhook payload:", payload);
+      
+      // First attempt with fetch and direct CORS handling
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+        mode: 'cors',
+      });
+      
+      console.log("Webhook response status:", response.status);
+      
+      if (response.ok) {
+        console.log("Webhook triggered successfully");
+        return true;
+      } else {
+        console.log("Webhook response not OK, trying fallback method");
+        
+        // Fallback to XHR if fetch fails due to CORS
+        return new Promise((resolve) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", webhookUrl, true);
+          xhr.setRequestHeader("Content-Type", "application/json");
+          
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              console.log("XMLHttpRequest completed with status:", xhr.status);
+              resolve(xhr.status >= 200 && xhr.status < 300);
+            }
+          };
+          
+          xhr.send(JSON.stringify(payload));
+          console.log("XMLHttpRequest sent");
+        });
+      }
     } catch (error) {
       console.error("Error triggering webhook:", error);
+      
+      // Final fallback - try with Image beacon which bypasses CORS
+      try {
+        console.log("Attempting final fallback with Image beacon");
+        const beaconUrl = `${webhookUrl}?data=${encodeURIComponent(JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          timestamp: new Date().toISOString(),
+          source: window.location.origin
+        }))}`;
+        
+        const img = new Image();
+        img.src = beaconUrl;
+        console.log("Image beacon triggered");
+        return true;
+      } catch (beaconError) {
+        console.error("All webhook trigger attempts failed:", beaconError);
+        return false;
+      }
     }
   };
 
@@ -81,7 +126,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
       await submitRegistration(formData);
       
       // Also send data to the webhook
-      await triggerWebhook();
+      const webhookResult = await triggerWebhook();
+      
+      if (webhookResult) {
+        console.log("Webhook triggered successfully");
+      } else {
+        console.warn("Webhook may not have triggered successfully");
+      }
       
       toast({
         title: "Registration successful!",
