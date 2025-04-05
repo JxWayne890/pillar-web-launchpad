@@ -13,18 +13,18 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center relative overflow-hidden pt-12">
+    <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center relative overflow-hidden pt-12 pb-16">
       {/* Modern background with subtle gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100 z-0"></div>
       <div className="absolute inset-0 opacity-10 bg-grid-pattern z-0"></div>
       
       <div className="section-container flex flex-col items-center text-center relative z-10 pt-0 md:pt-0">
-        <div className="animate-fade-in max-w-4xl mt-[-5vh] md:mt-[-8vh]">
+        <div className="animate-fade-in max-w-4xl mt-[-3vh] md:mt-[-5vh]">
           <div className="mb-6 md:mb-8">
             <div className="inline-block rounded-full bg-navy-blue/10 px-4 py-1.5 text-sm font-medium text-navy-blue mb-4">
               Pillar Web Designs
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold bg-gradient-to-r from-navy-blue via-pillar-blue to-navy-blue bg-clip-text text-transparent mb-4 md:mb-6 leading-tight tracking-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold bg-gradient-to-r from-navy-blue via-pillar-blue to-navy-blue bg-clip-text text-transparent mb-6 md:mb-8 leading-[1.15] tracking-tight px-4">
               Building Online <span className="text-pillar-blue">Foundations</span> That Last
             </h1>
             <p className="text-xl md:text-2xl text-steel-gray max-w-3xl mx-auto mb-8 md:mb-10 leading-relaxed">

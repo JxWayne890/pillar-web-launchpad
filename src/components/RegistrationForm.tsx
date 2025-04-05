@@ -5,6 +5,7 @@ import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { UserRound, Mail } from 'lucide-react';
 
 interface RegistrationFormProps {
   onRegistrationComplete: () => void;
@@ -164,71 +165,94 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
   };
 
   return (
-    <section id="register" className="bg-gray-50 py-16" ref={sectionRef}>
-      <div className="section-container max-w-2xl">
-        <div className={`animate-fade-in ${isVisible ? 'active' : ''}`}>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            Please Register to View Our Work
+    <section id="register" className="py-16 bg-gradient-to-b from-white to-gray-50" ref={sectionRef}>
+      <div className={`max-w-md mx-auto px-4 md:px-0 animate-fade-in ${isVisible ? 'active' : ''}`}>
+        <div className="text-center mb-8">
+          <div className="inline-block rounded-full bg-pillar-blue/10 px-4 py-1.5 text-sm font-medium text-pillar-blue mb-3">
+            Register Now
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-navy-blue to-pillar-blue bg-clip-text text-transparent">
+            See Our Portfolio
           </h2>
+          <p className="text-steel-gray text-lg">
+            Register to view our premium website designs
+          </p>
+        </div>
 
-          <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md space-y-6">
-            <div className="form-group">
-              <Label htmlFor="firstName" className="block text-gray-700 font-medium mb-2">
-                First Name
-              </Label>
-              <Input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-                className="form-input"
-                placeholder="Enter your first name"
-              />
+        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 space-y-6">
+          <div className="space-y-4">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="firstName" className="text-navy-blue font-medium">
+                  First Name
+                </Label>
+                <div className="relative">
+                  <UserRound className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                    className="pl-10 border-gray-200 h-12 rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
+                    placeholder="John"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="lastName" className="text-navy-blue font-medium">
+                  Last Name
+                </Label>
+                <div className="relative">
+                  <UserRound className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                    className="pl-10 border-gray-200 h-12 rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
+                    placeholder="Smith"
+                  />
+                </div>
+              </div>
             </div>
-
-            <div className="form-group">
-              <Label htmlFor="lastName" className="block text-gray-700 font-medium mb-2">
-                Last Name
-              </Label>
-              <Input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-                className="form-input"
-                placeholder="Enter your last name"
-              />
-            </div>
-
-            <div className="form-group">
-              <Label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+            
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-navy-blue font-medium">
                 Email Address
               </Label>
-              <Input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="form-input"
-                placeholder="Enter your email address"
-              />
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="pl-10 border-gray-200 h-12 rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
+                  placeholder="your@email.com"
+                />
+              </div>
             </div>
+          </div>
 
-            <Button
-              type="submit"
-              className="btn-primary w-full"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Submitting...' : 'Register Now'}
-            </Button>
-          </form>
-        </div>
+          <Button
+            type="submit"
+            className="w-full bg-gradient-to-r from-navy-blue to-pillar-blue hover:from-pillar-blue hover:to-navy-blue text-white font-bold py-3 h-12 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'View Our Work'}
+          </Button>
+          
+          <p className="text-center text-sm text-gray-500 mt-4">
+            We respect your privacy and will never share your information.
+          </p>
+        </form>
       </div>
     </section>
   );
