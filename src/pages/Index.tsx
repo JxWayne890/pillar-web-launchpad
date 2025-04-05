@@ -54,14 +54,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <HeroSection />
-      <div id="registration">
-        <RegistrationForm onRegistrationComplete={handleRegistrationComplete} />
+    <div className="min-h-screen bg-white overflow-hidden">
+      <div className="relative">
+        <HeroSection />
+        <div id="registration" className="relative z-10">
+          <RegistrationForm onRegistrationComplete={handleRegistrationComplete} />
+        </div>
+        {isRegistered && (
+          <div className="relative z-10 bg-gradient-to-b from-white to-gray-50">
+            <VideoSection onStartQualification={handleQualificationStart} />
+          </div>
+        )}
+        {showQuiz && (
+          <div className="relative z-10 bg-gradient-to-b from-gray-50 to-white">
+            <QualificationQuiz />
+          </div>
+        )}
+        <FooterSection />
       </div>
-      {isRegistered && <VideoSection onStartQualification={handleQualificationStart} />}
-      {showQuiz && <QualificationQuiz />}
-      <FooterSection />
     </div>
   );
 };
