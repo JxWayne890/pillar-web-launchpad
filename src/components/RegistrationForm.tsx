@@ -44,7 +44,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
   };
 
   const triggerWebhook = async () => {
-    const baseWebhookUrl = "https://n8n-1-yvtq.onrender.com/webhook/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
+    const baseWebhookUrl = "https://n8n-1-yvtq.onrender.com/webhook-test/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
     
     try {
       console.log("Attempting to trigger webhook at:", baseWebhookUrl);
