@@ -44,27 +44,25 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
   };
 
   const triggerWebhook = async () => {
-    const webhookUrl = "https://n8n-1-yvtq.onrender.com/webhook-test/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
+    const baseWebhookUrl = "https://n8n-1-yvtq.onrender.com/webhook-test/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
     
     try {
-      console.log("Attempting to trigger webhook at:", webhookUrl);
+      console.log("Attempting to trigger webhook at:", baseWebhookUrl);
       
-      const payload = {
+      // Build query parameters for GET request
+      const params = new URLSearchParams({
         fullName: formData.fullName,
         email: formData.email,
         timestamp: new Date().toISOString(),
         source: window.location.origin
-      };
+      });
       
-      console.log("Webhook payload:", payload);
+      const webhookUrl = `${baseWebhookUrl}?${params.toString()}`;
+      console.log("Webhook GET URL:", webhookUrl);
       
-      // First attempt with fetch and direct CORS handling
+      // Make a GET request instead of POST
       const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+        method: 'GET',
         mode: 'cors',
       });
       
@@ -76,11 +74,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
       } else {
         console.log("Webhook response not OK, trying fallback method");
         
-        // Fallback to XHR if fetch fails due to CORS
+        // Fallback to XHR
         return new Promise((resolve) => {
           const xhr = new XMLHttpRequest();
-          xhr.open("POST", webhookUrl, true);
-          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.open("GET", webhookUrl, true);
           
           xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -89,22 +86,25 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
             }
           };
           
-          xhr.send(JSON.stringify(payload));
+          xhr.send();
           console.log("XMLHttpRequest sent");
         });
       }
     } catch (error) {
       console.error("Error triggering webhook:", error);
       
-      // Final fallback - try with Image beacon which bypasses CORS
+      // Final fallback - try with Image beacon
       try {
         console.log("Attempting final fallback with Image beacon");
-        const beaconUrl = `${webhookUrl}?data=${encodeURIComponent(JSON.stringify({
+        
+        const params = new URLSearchParams({
           fullName: formData.fullName,
           email: formData.email,
           timestamp: new Date().toISOString(),
           source: window.location.origin
-        }))}`;
+        });
+        
+        const beaconUrl = `${baseWebhookUrl}?${params.toString()}`;
         
         const img = new Image();
         img.src = beaconUrl;
