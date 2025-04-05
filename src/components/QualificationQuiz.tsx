@@ -1,6 +1,8 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { submitQualification } from '../services/formService';
 import { toast } from '@/components/ui/use-toast';
+
 const QualificationQuiz = () => {
   const [formData, setFormData] = useState({
     businessName: '',
@@ -12,6 +14,7 @@ const QualificationQuiz = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
@@ -21,15 +24,18 @@ const QualificationQuiz = () => {
     }, {
       threshold: 0.1
     });
+
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
+
     return () => {
       if (sectionRef.current) {
         observer.disconnect();
       }
     };
   }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const {
       name,
@@ -42,6 +48,7 @@ const QualificationQuiz = () => {
       [name]: val
     }));
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -62,6 +69,7 @@ const QualificationQuiz = () => {
       setIsSubmitting(false);
     }
   };
+
   return <section id="qualify" className="bg-white py-16" ref={sectionRef}>
       <div className="section-container max-w-2xl">
         <div className={`animate-fade-in ${isVisible ? 'active' : ''}`}>
@@ -84,11 +92,18 @@ const QualificationQuiz = () => {
               <label htmlFor="businessType" className="block text-gray-700 font-medium mb-2">Type of Business</label>
               <select id="businessType" name="businessType" value={formData.businessType} onChange={handleChange} required className="form-input">
                 <option value="">Select business type</option>
-                <option value="Residential Agent">Residential Agent</option>
-                <option value="Commercial Agent">Commercial Agent</option>
-                <option value="Property Management">Property Management</option>
-                <option value="Real Estate Investing">Real Estate Investing</option>
-                <option value="Real Estate Marketing">Real Estate Marketing</option>
+                <option value="Licensed Real Estate Agent">Licensed Real Estate Agent</option>
+                <option value="Real Estate Investor">Real Estate Investor</option>
+                <option value="Skilled Trade">Skilled Trade</option>
+                <option value="Local Service Business">Local Service Business</option>
+                <option value="Professional Service">Professional Service</option>
+                <option value="Restaurant/Food Service">Restaurant/Food Service</option>
+                <option value="Retail">Retail</option>
+                <option value="Technology">Technology</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Education">Education</option>
+                <option value="Fitness/Wellness">Fitness/Wellness</option>
+                <option value="Event Planning">Event Planning</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -139,4 +154,5 @@ const QualificationQuiz = () => {
       </div>
     </section>;
 };
+
 export default QualificationQuiz;
