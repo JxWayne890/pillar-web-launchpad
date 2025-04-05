@@ -43,6 +43,26 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
     };
   }, []);
 
+  // Check for return URL in local storage
+  useEffect(() => {
+    const returnUrl = localStorage.getItem('quizReturnUrl');
+    if (returnUrl) {
+      toast({
+        title: "Welcome back!",
+        description: "It looks like you have an incomplete quiz. Click to continue where you left off.",
+        action: (
+          <Button 
+            variant="outline" 
+            onClick={() => window.location.href = returnUrl}
+          >
+            Continue Quiz
+          </Button>
+        ),
+        duration: 10000
+      });
+    }
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));

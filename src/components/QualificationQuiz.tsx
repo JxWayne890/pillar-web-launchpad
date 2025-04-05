@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { submitQualification } from '../services/formService';
+import { submitQualification, saveQuizProgress } from '../services/formService';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,20 +13,28 @@ interface QualificationQuizProps {
     email: string;
   };
   isReturnVisit?: boolean;
+  savedData?: {
+    business_name?: string;
+    business_type?: string;
+    budget?: string;
+    timeline?: string;
+    committed?: boolean;
+  };
 }
 
-const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData, isReturnVisit }) => {
+const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData, isReturnVisit, savedData }) => {
   const [formData, setFormData] = useState({
     firstName: userData?.firstName || '',
     lastName: userData?.lastName || '',
     email: userData?.email || '',
-    businessName: '',
-    businessType: '',
-    budget: '',
-    timeline: '',
-    committed: false
+    businessName: savedData?.business_name || '',
+    businessType: savedData?.business_type || '',
+    budget: savedData?.budget || '',
+    timeline: savedData?.timeline || '',
+    committed: savedData?.committed || false
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [saveTimeout, setSaveTimeout] = useState<NodeJS.Timeout | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -51,7 +59,7 @@ const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData, isRetur
     };
   }, []);
 
-  // Update form data when userData changes
+  // Update form data when userData or savedData changes
   useEffect(() => {
     if (userData) {
       setFormData(prev => ({
@@ -61,7 +69,18 @@ const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData, isRetur
         email: userData.email
       }));
     }
-  }, [userData]);
+    
+    if (savedData) {
+      setFormData(prev => ({
+        ...prev,
+        businessName: savedData.business_name || prev.businessName,
+        businessType: savedData.business_type || prev.businessType,
+        budget: savedData.budget || prev.budget,
+        timeline: savedData.timeline || prev.timeline,
+        committed: savedData.committed || prev.committed
+      }));
+    }
+  }, [userData, savedData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const {
@@ -70,10 +89,51 @@ const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData, isRetur
       type
     } = e.target as HTMLInputElement;
     const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+    
     setFormData(prev => ({
       ...prev,
       [name]: val
     }));
+    
+    // Auto-save progress when fields change
+    if (saveTimeout) {
+      clearTimeout(saveTimeout);
+    }
+    
+    // Only save if we have the basic user info
+    if (formData.firstName && formData.lastName && formData.email) {
+      const timeoutId = setTimeout(async () => {
+        try {
+          // Only save if we have some business information
+          if (
+            formData.businessName || 
+            formData.businessType || 
+            formData.budget || 
+            formData.timeline
+          ) {
+            const returnUrl = await saveQuizProgress({
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              email: formData.email,
+              businessName: formData.businessName,
+              businessType: formData.businessType,
+              budget: formData.budget,
+              timeline: formData.timeline,
+              committed: formData.committed
+            });
+            
+            console.log('Progress saved. Return URL:', returnUrl);
+            
+            // Store the return URL in local storage
+            localStorage.setItem('quizReturnUrl', returnUrl);
+          }
+        } catch (error) {
+          console.error('Error saving progress:', error);
+        }
+      }, 2000); // Save after 2 seconds of inactivity
+      
+      setSaveTimeout(timeoutId);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -98,6 +158,9 @@ const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData, isRetur
         title: "Qualification submitted!",
         description: "Thank you for taking the time to complete our qualification quiz. We'll be in touch soon."
       });
+      
+      // Clear the saved return URL from local storage since the quiz is now complete
+      localStorage.removeItem('quizReturnUrl');
     } catch (error) {
       console.error('Error submitting qualification:', error);
       toast({
@@ -299,6 +362,13 @@ const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData, isRetur
             >
               {isSubmitting ? 'Submitting...' : 'Submit Qualification'}
             </button>
+            
+            {!isReturnVisit && (
+              <p className="text-sm text-gray-500 mt-4 text-center">
+                Don't worry, your progress is automatically saved.
+                You can return and complete this form later.
+              </p>
+            )}
           </form>
         </div>
       </div>

@@ -1,4 +1,6 @@
 
+import { supabase } from '@/integrations/supabase/client';
+
 interface RegistrationData {
   fullName: string;
   email: string;
@@ -20,6 +22,19 @@ interface ReturnUserData {
   firstName: string;
   lastName: string;
   email: string;
+}
+
+interface QuizSubmission {
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  business_name?: string;
+  business_type?: string;
+  budget?: string;
+  timeline?: string;
+  committed?: boolean;
+  completed?: boolean;
 }
 
 // In a real application, this would connect to a backend API
@@ -69,7 +84,6 @@ export const submitQualification = async (data: QualificationData): Promise<void
       const response = await fetch(getUrl);
       console.log('Webhook response status:', response.status);
       console.log('Webhook triggered successfully');
-      return;
     } catch (fetchError) {
       console.error('Error triggering webhook:', fetchError);
       
@@ -80,6 +94,32 @@ export const submitQualification = async (data: QualificationData): Promise<void
       img.onload = () => console.log('Image beacon triggered');
       img.onerror = () => console.log('Image beacon triggered');
       console.log('Webhook triggered successfully');
+    }
+
+    // Save to Supabase if there is a userId (for return visits)
+    if (data.firstName && data.lastName && data.email) {
+      // Check if we already have a submission for this email
+      const { data: existingSubmission } = await supabase
+        .from('quiz_submissions')
+        .select('*')
+        .eq('email', data.email)
+        .maybeSingle();
+
+      if (existingSubmission) {
+        // Update existing submission
+        await supabase
+          .from('quiz_submissions')
+          .update({
+            business_name: data.businessName,
+            business_type: data.businessType,
+            budget: data.budget,
+            timeline: data.timeline,
+            committed: data.committed,
+            completed: true,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingSubmission.id);
+      }
     }
   } catch (error) {
     console.error('Failed to trigger qualification webhook:', error);
@@ -98,9 +138,84 @@ export const generateUserId = (): string => {
   return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
 };
 
-// Function to generate a return URL for the user
-export const generateReturnUrl = (userData: { firstName: string; lastName: string; email: string }): string => {
+// Function to save quiz progress and generate a return URL for the user
+export const saveQuizProgress = async (userData: { 
+  firstName: string; 
+  lastName: string; 
+  email: string;
+  businessName?: string;
+  businessType?: string;
+  budget?: string;
+  timeline?: string;
+  committed?: boolean;
+}): Promise<string> => {
   const userId = generateUserId();
+  
+  // Save the progress to Supabase
+  try {
+    // Check if we already have a submission for this email
+    const { data: existingSubmission } = await supabase
+      .from('quiz_submissions')
+      .select('*')
+      .eq('email', userData.email)
+      .maybeSingle();
+    
+    if (existingSubmission) {
+      // Update existing submission
+      await supabase
+        .from('quiz_submissions')
+        .update({
+          business_name: userData.businessName,
+          business_type: userData.businessType,
+          budget: userData.budget,
+          timeline: userData.timeline,
+          committed: userData.committed,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', existingSubmission.id);
+      
+      return generateReturnUrl({
+        firstName: existingSubmission.first_name,
+        lastName: existingSubmission.last_name,
+        email: existingSubmission.email,
+        userId: existingSubmission.user_id
+      });
+    } else {
+      // Create new submission
+      const submissionData: QuizSubmission = {
+        user_id: userId,
+        first_name: userData.firstName,
+        last_name: userData.lastName,
+        email: userData.email,
+        business_name: userData.businessName,
+        business_type: userData.businessType,
+        budget: userData.budget,
+        timeline: userData.timeline,
+        committed: userData.committed,
+        completed: false
+      };
+      
+      await supabase.from('quiz_submissions').insert(submissionData);
+    }
+  } catch (error) {
+    console.error('Error saving quiz progress:', error);
+  }
+  
+  return generateReturnUrl({
+    firstName: userData.firstName,
+    lastName: userData.lastName,
+    email: userData.email,
+    userId
+  });
+};
+
+// Function to generate a return URL for the user
+export const generateReturnUrl = (userData: { 
+  firstName: string; 
+  lastName: string; 
+  email: string;
+  userId: string;
+}): string => {
   const baseUrl = window.location.origin;
   const params = new URLSearchParams({
     firstName: encodeURIComponent(userData.firstName),
@@ -108,7 +223,7 @@ export const generateReturnUrl = (userData: { firstName: string; lastName: strin
     email: encodeURIComponent(userData.email)
   });
   
-  return `${baseUrl}/return/${userId}?${params.toString()}`;
+  return `${baseUrl}/return/${userData.userId}?${params.toString()}`;
 };
 
 // Function to trigger the return user webhook
@@ -151,5 +266,26 @@ export const triggerReturnUserWebhook = async (data: ReturnUserData): Promise<vo
     }
   } catch (error) {
     console.error('Failed to trigger return user webhook:', error);
+  }
+};
+
+// Function to fetch quiz progress for a returning user
+export const fetchQuizProgress = async (userId: string): Promise<QuizSubmission | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('quiz_submissions')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+    
+    if (error) {
+      console.error('Error fetching quiz progress:', error);
+      return null;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Error fetching quiz progress:', error);
+    return null;
   }
 };
