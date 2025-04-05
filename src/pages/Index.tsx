@@ -56,7 +56,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <HeroSection />
-      <RegistrationForm onRegistrationComplete={handleRegistrationComplete} />
+      <div id="registration">
+        <RegistrationForm onRegistrationComplete={handleRegistrationComplete} />
+      </div>
       {isRegistered && <VideoSection onStartQualification={handleQualificationStart} />}
       {showQuiz && <QualificationQuiz />}
       <FooterSection />

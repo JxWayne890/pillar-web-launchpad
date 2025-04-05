@@ -4,10 +4,11 @@ import { ArrowDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
-  const scrollToVideos = () => {
-    const videosSection = document.getElementById('videos');
-    if (videosSection) {
-      videosSection.scrollIntoView({ behavior: 'smooth' });
+  const scrollToRegistration = () => {
+    // First scroll to registration form since it needs to be filled out before videos are shown
+    const registrationSection = document.getElementById('registration');
+    if (registrationSection) {
+      registrationSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -32,7 +33,7 @@ const HeroSection = () => {
           </div>
           
           <Button
-            onClick={scrollToVideos}
+            onClick={scrollToRegistration}
             size="lg"
             className="bg-navy-blue hover:bg-navy-blue/90 text-white font-bold group flex items-center gap-2 px-10 py-7 text-lg rounded-md shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
