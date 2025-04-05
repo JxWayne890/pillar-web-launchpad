@@ -165,25 +165,25 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
   };
 
   return (
-    <section id="register" className="py-16 bg-gradient-to-b from-white to-gray-50" ref={sectionRef}>
-      <div className={`max-w-md mx-auto px-4 md:px-0 animate-fade-in ${isVisible ? 'active' : ''}`}>
-        <div className="text-center mb-8">
+    <section id="register" className="py-20 bg-gradient-to-b from-white to-gray-50" ref={sectionRef}>
+      <div className={`max-w-2xl mx-auto px-4 md:px-8 animate-fade-in ${isVisible ? 'active' : ''}`}>
+        <div className="text-center mb-10">
           <div className="inline-block rounded-full bg-pillar-blue/10 px-4 py-1.5 text-sm font-medium text-pillar-blue mb-3">
             Register Now
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-navy-blue to-pillar-blue bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-navy-blue to-pillar-blue bg-clip-text text-transparent">
             See Our Portfolio
           </h2>
-          <p className="text-steel-gray text-lg">
+          <p className="text-steel-gray text-xl max-w-3xl mx-auto">
             Register to view our premium website designs
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 space-y-6">
-          <div className="space-y-4">
-            <div className="flex flex-col md:flex-row gap-4">
+        <form onSubmit={handleSubmit} className="bg-white p-10 rounded-xl shadow-xl border border-gray-100 space-y-8">
+          <div className="space-y-6">
+            <div className="flex flex-col md:flex-row gap-6">
               <div className="flex-1 space-y-2">
-                <Label htmlFor="firstName" className="text-navy-blue font-medium">
+                <Label htmlFor="firstName" className="text-navy-blue font-medium text-base">
                   First Name
                 </Label>
                 <div className="relative">
@@ -195,14 +195,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
                     value={formData.firstName}
                     onChange={handleChange}
                     required
-                    className="pl-10 border-gray-200 h-12 rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
+                    className="pl-10 border-gray-200 h-14 text-lg rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
                     placeholder="John"
                   />
                 </div>
               </div>
               
               <div className="flex-1 space-y-2">
-                <Label htmlFor="lastName" className="text-navy-blue font-medium">
+                <Label htmlFor="lastName" className="text-navy-blue font-medium text-base">
                   Last Name
                 </Label>
                 <div className="relative">
@@ -214,7 +214,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
                     value={formData.lastName}
                     onChange={handleChange}
                     required
-                    className="pl-10 border-gray-200 h-12 rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
+                    className="pl-10 border-gray-200 h-14 text-lg rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
                     placeholder="Smith"
                   />
                 </div>
@@ -222,7 +222,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-navy-blue font-medium">
+              <Label htmlFor="email" className="text-navy-blue font-medium text-base">
                 Email Address
               </Label>
               <div className="relative">
@@ -234,7 +234,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="pl-10 border-gray-200 h-12 rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
+                  className="pl-10 border-gray-200 h-14 text-lg rounded-lg focus:border-pillar-blue focus:ring-pillar-blue"
                   placeholder="your@email.com"
                 />
               </div>
@@ -243,7 +243,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
 
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-navy-blue to-pillar-blue hover:from-pillar-blue hover:to-navy-blue text-white font-bold py-3 h-12 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+            className="w-full bg-gradient-to-r from-navy-blue to-pillar-blue hover:from-pillar-blue hover:to-navy-blue text-white font-bold py-4 h-16 text-lg rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Submitting...' : 'View Our Work'}
