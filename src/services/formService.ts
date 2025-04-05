@@ -40,38 +40,8 @@ export const submitQualification = async (data: QualificationData): Promise<void
   // Log the form data to console (for demonstration purposes)
   console.log('Qualification form submitted:', data);
   
-  // Trigger the webhook
-  await triggerQualificationWebhook(data);
-  
-  // Simulate API call
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
-  });
-};
-
-// Function to generate a unique ID for the user
-export const generateUserId = (): string => {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
-};
-
-// Function to generate a return URL for the user
-export const generateReturnUrl = (userData: { firstName: string; lastName: string; email: string }): string => {
-  const userId = generateUserId();
-  const baseUrl = window.location.origin;
-  const params = new URLSearchParams({
-    firstName: encodeURIComponent(userData.firstName),
-    lastName: encodeURIComponent(userData.lastName),
-    email: encodeURIComponent(userData.email)
-  });
-  
-  return `${baseUrl}/return/${userId}?${params.toString()}`;
-};
-
-// Function to trigger the qualification webhook
-const triggerQualificationWebhook = async (data: QualificationData): Promise<void> => {
-  const webhookUrl = 'https://n8n-1-yvtq.onrender.com/webhook-test/f6e9846c-5686-41c2-ab2e-390a1dbf9d2d';
+  // Trigger the webhook - using the return user webhook URL for all qualification submissions
+  const webhookUrl = 'https://n8n-1-yvtq.onrender.com/webhook-test/73b3b5c9-cbd1-4039-b312-51bdcd58dd87';
   
   try {
     console.log('Attempting to trigger qualification webhook at:', webhookUrl);
@@ -87,7 +57,8 @@ const triggerQualificationWebhook = async (data: QualificationData): Promise<voi
       timeline: data.timeline,
       committed: data.committed.toString(),
       timestamp: new Date().toISOString(),
-      source: window.location.href
+      source: window.location.href,
+      event: 'qualification_submitted'
     });
     
     const getUrl = `${webhookUrl}?${params.toString()}`;
@@ -113,6 +84,31 @@ const triggerQualificationWebhook = async (data: QualificationData): Promise<voi
   } catch (error) {
     console.error('Failed to trigger qualification webhook:', error);
   }
+  
+  // Simulate API call
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+};
+
+// Function to generate a unique ID for the user
+export const generateUserId = (): string => {
+  return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+};
+
+// Function to generate a return URL for the user
+export const generateReturnUrl = (userData: { firstName: string; lastName: string; email: string }): string => {
+  const userId = generateUserId();
+  const baseUrl = window.location.origin;
+  const params = new URLSearchParams({
+    firstName: encodeURIComponent(userData.firstName),
+    lastName: encodeURIComponent(userData.lastName),
+    email: encodeURIComponent(userData.email)
+  });
+  
+  return `${baseUrl}/return/${userId}?${params.toString()}`;
 };
 
 // Function to trigger the return user webhook
