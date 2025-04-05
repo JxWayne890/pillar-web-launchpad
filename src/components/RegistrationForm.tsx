@@ -43,12 +43,41 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const triggerWebhook = async () => {
+    const webhookUrl = "https://n8n-1-yvtq.onrender.com/webhook/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
+    
+    try {
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "no-cors", // Add this to handle CORS
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          timestamp: new Date().toISOString(),
+          source: window.location.origin
+        }),
+      });
+      
+      console.log("Webhook triggered with user data");
+    } catch (error) {
+      console.error("Error triggering webhook:", error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
+      // Send data to the original form service
       await submitRegistration(formData);
+      
+      // Also send data to the webhook
+      await triggerWebhook();
+      
       toast({
         title: "Registration successful!",
         description: "Thank you for your interest in Pillar Web Designs.",
