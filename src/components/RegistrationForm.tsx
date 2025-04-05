@@ -47,21 +47,26 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
     const webhookUrl = "https://n8n-1-yvtq.onrender.com/webhook/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
     
     try {
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "no-cors", // Add this to handle CORS
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          email: formData.email,
-          timestamp: new Date().toISOString(),
-          source: window.location.origin
-        }),
+      // Use XMLHttpRequest instead of fetch with no-cors
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", webhookUrl, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      
+      const payload = JSON.stringify({
+        fullName: formData.fullName,
+        email: formData.email,
+        timestamp: new Date().toISOString(),
+        source: window.location.origin
       });
       
-      console.log("Webhook triggered with user data");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          console.log("Webhook request completed with status:", xhr.status);
+        }
+      };
+      
+      xhr.send(payload);
+      console.log("Webhook triggered with payload:", payload);
     } catch (error) {
       console.error("Error triggering webhook:", error);
     }
