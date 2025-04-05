@@ -1,5 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
+import { Database } from '@/integrations/supabase/types';
 
 interface RegistrationData {
   fullName: string;
@@ -99,15 +100,19 @@ export const submitQualification = async (data: QualificationData): Promise<void
     // Save to Supabase if there is a userId (for return visits)
     if (data.firstName && data.lastName && data.email) {
       // Check if we already have a submission for this email
-      const { data: existingSubmission } = await supabase
+      const { data: existingSubmission, error: selectError } = await supabase
         .from('quiz_submissions')
         .select('*')
         .eq('email', data.email)
         .maybeSingle();
+      
+      if (selectError) {
+        console.error('Error checking for existing submission:', selectError);
+      }
 
       if (existingSubmission) {
         // Update existing submission
-        await supabase
+        const { error: updateError } = await supabase
           .from('quiz_submissions')
           .update({
             business_name: data.businessName,
@@ -119,6 +124,10 @@ export const submitQualification = async (data: QualificationData): Promise<void
             updated_at: new Date().toISOString()
           })
           .eq('id', existingSubmission.id);
+        
+        if (updateError) {
+          console.error('Error updating quiz submission:', updateError);
+        }
       }
     }
   } catch (error) {
@@ -154,15 +163,19 @@ export const saveQuizProgress = async (userData: {
   // Save the progress to Supabase
   try {
     // Check if we already have a submission for this email
-    const { data: existingSubmission } = await supabase
+    const { data: existingSubmission, error: selectError } = await supabase
       .from('quiz_submissions')
       .select('*')
       .eq('email', userData.email)
       .maybeSingle();
     
+    if (selectError) {
+      console.error('Error checking for existing submission:', selectError);
+    }
+    
     if (existingSubmission) {
       // Update existing submission
-      await supabase
+      const { error: updateError } = await supabase
         .from('quiz_submissions')
         .update({
           business_name: userData.businessName,
@@ -173,6 +186,10 @@ export const saveQuizProgress = async (userData: {
           updated_at: new Date().toISOString()
         })
         .eq('id', existingSubmission.id);
+      
+      if (updateError) {
+        console.error('Error updating quiz submission:', updateError);
+      }
       
       return generateReturnUrl({
         firstName: existingSubmission.first_name,
@@ -195,7 +212,13 @@ export const saveQuizProgress = async (userData: {
         completed: false
       };
       
-      await supabase.from('quiz_submissions').insert(submissionData);
+      const { error: insertError } = await supabase
+        .from('quiz_submissions')
+        .insert(submissionData);
+      
+      if (insertError) {
+        console.error('Error inserting quiz submission:', insertError);
+      }
     }
   } catch (error) {
     console.error('Error saving quiz progress:', error);
