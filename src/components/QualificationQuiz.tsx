@@ -12,9 +12,10 @@ interface QualificationQuizProps {
     lastName: string;
     email: string;
   };
+  isReturnVisit?: boolean;
 }
 
-const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData }) => {
+const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData, isReturnVisit }) => {
   const [formData, setFormData] = useState({
     firstName: userData?.firstName || '',
     lastName: userData?.lastName || '',
@@ -112,12 +113,16 @@ const QualificationQuiz: React.FC<QualificationQuizProps> = ({ userData }) => {
   return <section id="qualify" className="bg-white py-16" ref={sectionRef}>
       <div className="section-container max-w-2xl">
         <div className={`animate-fade-in ${isVisible ? 'active' : ''}`}>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
-            Let's See If We're a Good Fit
-          </h2>
-          <p className="text-xl text-gray-600 text-center mb-10">
-            Please answer a few questions about your project
-          </p>
+          {!isReturnVisit && (
+            <>
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">
+                Let's See If We're a Good Fit
+              </h2>
+              <p className="text-xl text-gray-600 text-center mb-10">
+                Please answer a few questions about your project
+              </p>
+            </>
+          )}
 
           <form onSubmit={handleSubmit} className="bg-gray-50 p-8 rounded-lg shadow-md">
             {/* Personal Information Section */}
