@@ -1,11 +1,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { submitRegistration } from '../services/formService';
+import { submitRegistration, saveQuizProgress } from '../services/formService';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { UserRound, Mail } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface RegistrationFormProps {
   onRegistrationComplete: (userData: { firstName: string; lastName: string; email: string }) => void;
@@ -66,6 +67,26 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const saveToSupabase = async () => {
+    try {
+      // Generate return URL and save to Supabase
+      const returnUrl = await saveQuizProgress({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email
+      });
+      
+      // Store the return URL in localStorage for later use
+      localStorage.setItem('quizReturnUrl', returnUrl);
+      
+      console.log('User data saved to Supabase, return URL:', returnUrl);
+      return true;
+    } catch (error) {
+      console.error('Error saving to Supabase:', error);
+      return false;
+    }
   };
 
   const triggerWebhook = async () => {
@@ -149,6 +170,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
     setIsSubmitting(true);
 
     try {
+      // Immediately save to Supabase
+      await saveToSupabase();
+      
       // Combine first and last name for the original form service
       const combinedData = {
         fullName: `${formData.firstName} ${formData.lastName}`,
