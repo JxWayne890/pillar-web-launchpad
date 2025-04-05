@@ -2,6 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { submitRegistration } from '../services/formService';
 import { toast } from '@/components/ui/use-toast';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 interface RegistrationFormProps {
   onRegistrationComplete: () => void;
@@ -9,7 +12,8 @@ interface RegistrationFormProps {
 
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationComplete }) => {
   const [formData, setFormData] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     email: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,7 +55,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
       
       // Build query parameters for GET request
       const params = new URLSearchParams({
-        fullName: formData.fullName,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email,
         timestamp: new Date().toISOString(),
         source: window.location.origin
@@ -60,7 +65,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
       const webhookUrl = `${baseWebhookUrl}?${params.toString()}`;
       console.log("Webhook GET URL:", webhookUrl);
       
-      // Make a GET request instead of POST
+      // Make a GET request
       const response = await fetch(webhookUrl, {
         method: 'GET',
         mode: 'cors',
@@ -98,7 +103,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
         console.log("Attempting final fallback with Image beacon");
         
         const params = new URLSearchParams({
-          fullName: formData.fullName,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           email: formData.email,
           timestamp: new Date().toISOString(),
           source: window.location.origin
@@ -122,8 +128,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
     setIsSubmitting(true);
 
     try {
+      // Combine first and last name for the original form service
+      const combinedData = {
+        fullName: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email
+      };
+      
       // Send data to the original form service
-      await submitRegistration(formData);
+      await submitRegistration(combinedData);
       
       // Also send data to the webhook
       const webhookResult = await triggerWebhook();
@@ -159,28 +171,44 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
             Please Register to View Our Work
           </h2>
 
-          <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
+          <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md space-y-6">
             <div className="form-group">
-              <label htmlFor="fullName" className="block text-gray-700 font-medium mb-2">
-                Full Name
-              </label>
-              <input
+              <Label htmlFor="firstName" className="block text-gray-700 font-medium mb-2">
+                First Name
+              </Label>
+              <Input
                 type="text"
-                id="fullName"
-                name="fullName"
-                value={formData.fullName}
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
                 onChange={handleChange}
                 required
                 className="form-input"
-                placeholder="Enter your full name"
+                placeholder="Enter your first name"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+              <Label htmlFor="lastName" className="block text-gray-700 font-medium mb-2">
+                Last Name
+              </Label>
+              <Input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                className="form-input"
+                placeholder="Enter your last name"
+              />
+            </div>
+
+            <div className="form-group">
+              <Label htmlFor="email" className="block text-gray-700 font-medium mb-2">
                 Email Address
-              </label>
-              <input
+              </Label>
+              <Input
                 type="email"
                 id="email"
                 name="email"
@@ -192,13 +220,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
               />
             </div>
 
-            <button
+            <Button
               type="submit"
               className="btn-primary w-full"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Submitting...' : 'Register Now'}
-            </button>
+            </Button>
           </form>
         </div>
       </div>
