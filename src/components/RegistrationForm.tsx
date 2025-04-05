@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { UserRound, Mail } from 'lucide-react';
 
 interface RegistrationFormProps {
-  onRegistrationComplete: () => void;
+  onRegistrationComplete: (userData: { firstName: string; lastName: string; email: string }) => void;
 }
 
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationComplete }) => {
@@ -151,7 +151,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
         title: "Registration successful!",
         description: "Thank you for your interest in Pillar Web Designs.",
       });
-      onRegistrationComplete();
+      
+      // Pass the user data to the parent component
+      onRegistrationComplete({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email
+      });
     } catch (error) {
       console.error('Error submitting form:', error);
       toast({

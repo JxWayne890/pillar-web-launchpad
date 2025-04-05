@@ -6,9 +6,16 @@ import RegistrationForm from '@/components/RegistrationForm';
 import QualificationQuiz from '@/components/QualificationQuiz';
 import FooterSection from '@/components/FooterSection';
 
+interface UserData {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 const Index = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
+  const [userData, setUserData] = useState<UserData | undefined>(undefined);
   
   useEffect(() => {
     // Add intersection observer to animate elements as they come into view
@@ -29,7 +36,8 @@ const Index = () => {
     };
   }, []);
 
-  const handleRegistrationComplete = () => {
+  const handleRegistrationComplete = (formData: UserData) => {
+    setUserData(formData);
     setIsRegistered(true);
     
     // Scroll to videos section after registration
@@ -67,7 +75,7 @@ const Index = () => {
         )}
         {showQuiz && (
           <div className="relative z-10 bg-gradient-to-b from-gray-50 to-white">
-            <QualificationQuiz />
+            <QualificationQuiz userData={userData} />
           </div>
         )}
         <FooterSection />

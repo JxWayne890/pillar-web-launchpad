@@ -5,6 +5,9 @@ interface RegistrationData {
 }
 
 interface QualificationData {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
   businessName: string;
   businessType: string;
   budget: string;
