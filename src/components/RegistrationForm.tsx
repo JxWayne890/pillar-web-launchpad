@@ -44,7 +44,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onRegistrationCompl
   };
 
   const triggerWebhook = async () => {
-    const webhookUrl = "https://n8n-1-yvtq.onrender.com/webhook/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
+    const webhookUrl = "https://n8n-1-yvtq.onrender.com/webhook-test/673b43c6-0ac7-4bcb-9776-fc7a25cd7ac0";
     
     try {
       // Use XMLHttpRequest instead of fetch with no-cors
